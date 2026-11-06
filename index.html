@@ -1,536 +1,195 @@
 <!DOCTYPE html>
-<!-- saved from url=(0048)https://appcor.cor-rio.work/camera/000567/?app=1 -->
-<html lang="pt-br" data-deeptranslate-injected="true"><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/content/location/location.js" id="eppiocemhmnlbhjplcgkofciiegomcon"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/extend-native-history-api.js"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/requests.js"></script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Camera ao vivo</title>
-    <link rel="icon" type="image/png" href="https://appcor.cor-rio.work/static/core/icon.f6a224c5a4f1.png">
-    <link rel="apple-touch-icon" href="https://appcor.cor-rio.work/static/core/icon.f6a224c5a4f1.png">
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STUDIO | O Corte</title>
     <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        background: #000;
-        overflow: hidden;
-        font-family: Arial, sans-serif;
-        color: #fff;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        user-select: none;
-      }
-      #video-wrap {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: #000;
-      }
-      video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        background: #000;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        user-select: none;
-      }
-      #camera-info {
-        position: absolute;
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        gap: 10px;
-        z-index: 5;
-        pointer-events: none;
-        top: 0px;
-        right: auto;
-        left: auto;
-        bottom: auto;
-      }
-      #logo {
-        width: 88px;
-        height: auto;
-        object-fit: contain;
-        flex-shrink: 0;
-      }
-      #camera-label {
-        color: rgba(255, 255, 255, 0.92);
-        font-size: 14px;
-        font-weight: 700;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 320px;
-        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
-      }
-      #loading,
-      #error {
-        position: absolute;
-        z-index: 10;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 18px;
-        text-align: center;
-        font-family: Arial, sans-serif;
-        background: rgba(0, 0, 0, 0.7);
-        padding: 16px 24px;
-        border-radius: 10px;
-        max-width: 90vw;
-      }
-      #loading {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      #error {
-        display: none;
-        white-space: pre-line;
-      }
-      .dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #fff;
-        animation: blink 1.4s infinite both;
-      }
-      .dot:nth-child(2) { animation-delay: 0.2s; }
-      .dot:nth-child(3) { animation-delay: 0.4s; }
-      @keyframes blink {
-        0%, 80%, 100% { opacity: 0; }
-        40% { opacity: 1; }
-      }
+        :root {
+            --bg: #0a0a0c;
+            --surface: #121216;
+            --text: #e0e0e0;
+            --muted: #888890;
+            --accent: #d4d4d4;
+            --line: #222228;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5%;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--text);
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10vh 5%;
+        }
+
+        .tagline {
+            color: var(--muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        h1 span {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        p.subtext {
+            max-width: 600px;
+            color: var(--muted);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Buttons */
+        .actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: var(--surface);
+            border-color: var(--muted);
+        }
+
+        .btn.primary {
+            background: var(--accent);
+            color: var(--bg);
+            border-color: var(--accent);
+        }
+
+        .btn.primary:hover {
+            background: #fff;
+            border-color: #fff;
+        }
+
+        /* Footer */
+        footer {
+            padding: 2rem 5%;
+            border-top: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            nav a {
+                margin: 0 1rem;
+            }
+            .actions {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
     </style>
-  <script bis_use="true" type="text/javascript" charset="utf-8" nonce="" data-dynamic-id="ee92189d-d3ff-4636-8cc5-bde2b623b03a" src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"></script><script bis_use="true" type="text/javascript" charset="utf-8" nonce="" data-dynamic-id="ee92189d-d3ff-4636-8cc5-bde2b623b03a" src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"></script><style type="text/css">#screenShotContainer{cursor:crosshair;left:0;position:absolute;top:0}#toolPanel{background:#fff;border-radius:6px;box-sizing:content-box;height:24px;left:0;min-width:392px;padding:6px 14px;position:absolute;top:0;z-index:9999}#toolPanel .item-panel{float:left;height:24px;margin-right:15px;width:24px}#toolPanel .item-panel:last-child{margin-right:0}#toolPanel .square{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAHfSURBVHgB7ZpNboJAFMffY2hK/EhYWl3U3sSeQG/gEeoNxBvYI/QGeoLak9SVdSeNxlKFeR2atPEjDGiaCNP3S1jAvCHzG4ZhwR+AYRiGyS8I5+DUmnBpnMAH3/fhRLILO7WWEFZXdekAkAu5AJUwjaJIDiCYTzP1yFJklep9RPAgxxCBJ9ezQVqdSCsogmyMGmMLr6pA2+WLtk7XGL+rahm/QoFAlPfhaj5Jard1nZVs//iG9GiHNIQLEwnhElJHLeW9MRLF+wxM4BxEubEQ5Tr9HHal7kHOsCuN4e4Y1bHQ1VuJLW7TPdyNw8/tCHJGGEaHq80F5+Y2qT5ZOAiOPz3C1s5eEbDgn8HCpsPCpsPCpsPCpsPCpsPCpsPCpsPCpsPCpsPCpsPCpsPCpsPCpsPCpsPCplN8YSGO/2M7H+9J5Zof4nHuCfeCX7aAHuQMi6h9cEkbWNOGWojkGBG7v+eAPatU9+V2O1Yze3IK7q+xhHhAoMOHoI1laGNLdqXWIrKeoUBEkbzTpfK0wTS5WU3FdTWelBYUAEQYyPWb9gmnJvHkZjkpgnQsG65mXmodZOU7lYeeeo/bGEeDcgCpDUqNZYQon3Tpu13Oiw+7rusEzsWlg4wJWoZhGKYofAHzGYh5VvrALQAAAABJRU5ErkJggg==");background-size:cover}#toolPanel .square-active,#toolPanel .square:active,#toolPanel .square:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAGzSURBVHgB7ZpBSsNAFIb/GYq6zA3Um+gJ9Abisoi0nqDJCVSKdCOIN2hPYI/gDfQGVtyUQjO+qRaaNDOZFqGT5/sWhWTmlfmGycsiPyAIgiDEi8I2DMwRds0UE9yoCTYkXLhvTtDCBeY4p6oEMWBIWmGIGTKSfw8pCRN+MD36TREzmtbXVlndtHrhJsguCZD2C9/Ss7qHNzSJHKe4VmPXcMtXS7K9irv3tJN32DU59ZGc+okurVFTnwHGrjK/MOgPi2S4Uini4ZWaaUKSnZV7ds2XrgLtGqDjbDtxuRsPERuttdOW4NEcuqa7hQ8qXj37+EDD0fhniDB3RJg7IswdEeaOCHNHhLkjwtwRYe6IMHdEmDsizB0R5o4Ic0eEuSPC3Gm+cF7xHfsLn67pbuH2IvdUDH7N0EV8nJWuvYE1f8bDYAS1CIksr7sYmAnt6oi2auMU3J9j0FmsqYg3luGPLdn0ncYLmoTG8e/pdAz7sHmnHLXptojIfLKWsOhh36Rreaj4CIpUhYdLbYJ2jpQqbJOII1z601SHdAqffem7VbaLDz+ZBNMIpNthCVpBEAShKXwDKrBaATx5xUUAAAAASUVORK5CYII=")}#toolPanel .round{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAVoSURBVHgB7Zq9UiNHEMd7ZiWBETbrq3IVB8neG4jM2UHmzFzo6LgnAEcOBU9geIITkS9DhI4QT2De4NaBT1Q5sKhDcMdqpt2zaxntaPZL2pWWK/0iGM3s6q/u+epugAULFix4QjCYBdXvGlCzGhy5wxmuITA7eDn2JLIbCXgF3sAF7+8rKJhiBNu2zT9/tcc4/AjAGwBopx+MHRpzKoTowKdrF3ImX8HL69uWxZr02G3IA8S2kHhCwjuQE/kIzlvoGNgRAt/kYfHpBCvX9epNmosHSV0R0WUMXHql+9gINjC0aU436Iskuj2953jQ7/4MUzC54OV1x+L8gp7gmD5GgB49vA0gL0X1Uxt6vV7i8yzYDryEvY7p6Qohdya19mSCfRe2zkyLkRLKGZwMKnfHiSKjn++LR2RNxphj6NFjTL4a3Gaf25kFW/VN+vWxZXwYg6OphBqorG4cIkLT/KncE/3rU8hANsG+ZcmNNRDQlcBfQf+vYvZRsjjn7MJkbbL0ThZL87QdAzdTbqyDp7J6v1WYWAXNV1lb2qJftj32duRn6rtBSlJb2FrZeD++QOGp6Hf3YIZY9ectw6LmiurdVpqpZEEKeH3zV5qfP4Qa6dcWd92fYMagd9vmtdUXJLox0mxbsrIsvdvfk8YnW9h3Zf4+9FI1Z5Ub57g4ZcJ2bP7w+Q99TqeZz4lzmE5Qb/U2KXBnbmIVPbdnMVokNdQ2ljQ0XjCtyvpxUW09RRzqs+LRIknb1VG4lW1XVtV3jiZWMJ2k9kf/V648uP1wCCVB1mrHJDLkaUlWjhaslnoGu6NNdJY9gjJBrk1n9JNwI3kknfGjhkQKpj13W28TAjpQMkxWVnfxqP4xLi31va5Vhrk7hm9leT7aFAQezMQI1u+28hJKCmO8o7U0ovqaBdc3xwaU0Z2HiGpVP3LafhzNgFGwxaWjNfVK6c5DfLdWwYVHrFotvWAUuktg4dHEaWEM3dH/afV2TP14xOjwso5wAyWHLPxnqIGZI6VmwSjDnRn7B54YDNiaqT39ffgLIcKl+fwuBhOiW5SOwcZpGOHSqAk2LwClQp+zyIxGMwqme6artThQenhoZ2EwMO4sRsECQO/sxB3I544f0wpbWHjhbWqI2aX9gFzYJSyvvgslxXTRicpExl0etAH4EkqL/t1UBtJMpGCUcK417ZbSrYMQ7V64ESOD85GC5dJSS2uiwNnKAZSMrPf2aJemA7nuGhTP2i+dlRGb2v/ncRed2JMWHcj1kE6prMxXNpp6coBxPI4bkxiXpkj/hR4M4OBtef3i6zFiMcTL/cR5v7sTNyzxLG2wMkions3Vtendfm5aw68SSCAx1SIfbl1r6Ztv6c/vR1/JZXUdvY/nMAcs/uw38s3R76MMcyLvrt8ljU2XTItIbRAt0f+Q+KvmCa9vvGXaNuSnfvrdF6nGp+mkVmwpKb0CYwfyPWvl+WzcW9WTGMVCz0/9pCRTQlylMSgfe2H4aKq6i0QoqGghnpnqSbImxFOlS4eo+cxrdQqlMP1cbVOG/oBVv6Z05sf8wrnKqvzZL5zBOxI75kUc2JtBv9vO8siJiloCS5uLWgiXHns0VSWdEvqwsk9rxkF04cyMilr+J6buYoQWveIylXi1DnjLuxbwl4EHmYNw/gKl5uxMy5ZGqKxuHlNIdD+5p1rw6AaGFONmo4sfOhRxdBJ+uOAJtPUMKveH0+Sm8yo9dILEeXGlh+oANIkL6+Qj+D/8uS0pp6ylWScnP6FDiikffiwjfJ3F6kG5Il6pu7hcum8VUVYxkwLxKu2jkvJVKoXDg2LSteDleCMpukh7qcvBuvKKrPVasGDBgqfIvzowNmTgJi8YAAAAAElFTkSuQmCC");background-size:cover}#toolPanel .round-active,#toolPanel .round:active,#toolPanel .round:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAASrSURBVHgB7VrrUdtAEN6TB5Pn4BKUDuwKAhUEKsD8jJMMUAFQgfEQw8+YCoAKgAqgA5QKYn4SYl1272Kw7qGHJVlHRt+Mx/b5LN2n3dvbF0CNGjVqvCAwWASGvA0TaOPdfGjACr63xDiHMY7f46db8CCAL+wWSkY5hPu8BUvQRRKfIBREW6n/y+AKH8Qp/Mb3XRZAwSiW8BFfRQnu4YJXoQgwOEcNGMA3dgUFoRjCRRNVQVJ/gK0iJJ6PMKnusiC6k2J2gPMCvGMwM9bCsRaOtcXnJDA4hB7bhRyYn3Cf+9CES/zkW2aM8UUqeQ3v8X2LjWOvd4LXC1FDSEsYbMbMDHB/r80r7fkIkwozOLMYozEufADvUBpJJG2YkmdCe3zLPTbm2dvZCR/zTVzEyPhbCAe5iJpwxPfR2u8Zf2N4EvTYKWRANsIkWU+osXoV2p8bpZ2jJHGO9zVJO0T1ziBpL+1EsWdJjVXQmfkaOqU6DZ9xvz7gPeiYUuHhmmhtKZFewkN+B6qBIrJfWRcWie98ZDBqZMg6aMgSt1I6CR/zPujW+HzhZAl0T3rQUfjieEyBZMJ9sX+i5yzt2TfoCFSFR1xP9DwHsUayMQlIJrwMP7QxhoaiSEucFaS6ZCRVNJKlHE+YnpjuLh4II1I1yEjSMTgLWmuClOMJe7Ad+c5ECLcPruAPnvnSo3tGgpTthKWpX4+MceWJVg1SbfLqZkFSJh/fAjvhpiHy8TBqcQ0mKVMsboGdsH7WjZzYuyqkAbuIjFHiwQI7Yd1YXYOrCBXN4yLcNMJMmHJQ+swrcBUTzeVsGTmAjXCoeVVjJ9V5CulSBpGxCWQgDMpkBqVnE3ND9byYOTFhIxw161ykUt1GCD8j3z1zyshMWM9k/IKXhxXTYPp4+D+BmTCH6gKDecE0iRq3oU3CY+ViPrgOdRuGZqHZJBwo331wHbqzYTxZzIQb2mQ/ziGvHDLQia7PU4T2NGyCTMipYdc6uApToGNJKsYFD9E/NOAjuIvo2pjdDbYTDpUIhGJjF9VaqnM3MqYn+Z5gJ/yoVRdaqDo74Boyxu12wuSQ66qx7aCU1ZTORVygE+9pTbSUjltSHnIi60fGQpEBsSK58nDMLw3JgM4i+jFiIcu1d5Ex0sgeW4v7W7IvPTEm7s4qVW26d9NY1EssDiQTpsqcmhkkNWpCH6pCUxQHfGV0kCZJka6YJlsbbgwu5ghVe7EllyEnst3IGAX/PfYhzd/TVw9lVf4GVBeOSpiy4aTcCEuqMWlVV/lljHraSZuCKqYgnrPvIhF9TMg1RW3a134rrSBOkBc2qbC0mCc8VckyNUiqdM2m0CzfMGMra5/H/E0tnnjiJksdABXc8nTSEdFX6ORMRFnU1jizoKaWKeL6Lp4xAkrgpyFPJCkiW8JAYILvtnZFJnq91uZNG+fvxDvih1qV0QQujIsMO9lM6EkPTD40H5IxwEL8fp7adDGthyTtCZ6NrKTWQy4aTg+K6LkshvAUcm+TtItJFhRIdIpiCU/x3Ea4mVHqVAkktb+At7j/S2irKIewCipsyXpV+19FYJpSvRfZRUoaUh6t6oCkRo0aNVzDX2qpg7pu/G77AAAAAElFTkSuQmCC")}#toolPanel .right-top{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAGcSURBVHgB7dk/TsMwFMfx33M6RCoLG4Kl3KRH4Ah0ZOMKnABu0HIDbkC5AUfIAnTMQFGl/jF5MkMRKpIT59mu3met6qev0liNAyillFJKKRUEQVp5NkIIq0WFFuSCm9DCmOdm4ghhVES7yeZzMff5koGQoqBpwFg2stZM4UksGJZqJEAs2BDdWWsrRCa+aZWem9aabwXQ+MDH1Xb5fgkPAwhbeeyuZng+ba7IGAHJ3cOefmKvEViSwYdj7SM6Si74UKwBTbZbO0NHSQX/F7tevs0QQDLBErFuvQRIxbo1I5OMdetGJB3r1o4kRqxbP4JYsW6GsJixbo6g2LFulpAUYt08iSGJxLqZfQ8IGVuWr82z8f7JyRyeej0A6OXKNgcIg4JuQVRvBl8PqGuvo6PeglP6Ge/rJTjVWBY8OOVYFjQ49VgWLDiHWBYkOJdY1jk4p1jWKTi3WNY6OMdY1io411jm/V/aDC/uc41l/g8P1l79XSSPWOYdTPT7lWdOsayAJ1ucvBiD0+YFd0Vmd7NZfjxBKaWUUkopdfS+ASmNvgIGrsXnAAAAAElFTkSuQmCC");background-size:cover}#toolPanel .right-top-active,#toolPanel .right-top:active,#toolPanel .right-top:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAF3SURBVHgB7dpBSsNAFMbxb4roRvAK9SY9gkewSymCR9ATVBfq0noSewSPkCP0ANJxvropaISXvLx5A+8HbUpDAn8yCWESIIQQQgghBBUJ1l7zHBpuUocB7ILXJfQUH+XXHDo67LHEbdpKNprByhneoBeLw75mh32K2AVn7OCAXTDwUE6gDpX5v2jlMmwzFj1rO6zSJQROYE1ydX3OPEcXUGQ5pGV+Yq+hzGdwX2zGO0byF9x/ZJcleIORfAX/F7tKGyjwE2wQSz6CjWKpfrBhLNUNNo6lesEVYqlOcKVYsg+uGEu2wZVjyS7YQSzZBDuJpemDNWO/8Fm+j2dOthCadgJgiiPLCYQ97spnh3M8YplEU0fTBTsaxsemCXYaS/rBjmNJN9h5LOkFNxBLOsGNxNL44IZiaVxwY7E0PLjBWBoW3Ggsye+lX/IajcaSPDjj6o9/m4glefDvR57NxJL86WEqgXvcl+VFWT5JXzkIIYQQQgghtOkb2FSXUxZQW5sAAAAASUVORK5CYII=")}#toolPanel .brush{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAALESURBVHgB7ZlLbtswEECHpOykcQoIBQok6UY9QZsT1D5BkhMkOUpPEPQEcU+QLLtzdt26J6g2RQt0US0qRLBCMTMGHMiybJPyjwT4VtJoCPOZ1FCiADwej8fj8Xg8m4GB5YjOuytQxZkC+MgYxNjh4ZNUXyD7E0MD7BUOw1Dkr+6wi92aqzGH/CJP/w7BEDuFUTbIDwY0qguyEpTumUrbJ6wnO8FYmoNNzJHF8wSguMaD+2qLAlqDVuetzp8zxp4RXiBbAOtB+ms8iqJz3MduX1ZaJ1IWpzqFTIANaMqOY/n/e94+fI/S5dx9xoHhtW/Lfmr3U9pAdoJMf19hxtdyjAE7Aw12K7ygQDGurutkJ0ip+pVQBBrsTnhZNS7YDewfRXPbCn5TDilQWpV6N8J6S08kBB/MSM9pi1PaUuEF96xSKq5kT0vPbatirNKfQYPtLkvLCpSUCedswBiLKi1jOcovgnbrtk62kKqn+2y9PWHdaoyjOUd6BlNZYjvCpkuPhnQTWWLz93CDdZYkivbeKebUFqKmssRmhZvIvpDUdm4VWWJzU3oV2QXVeBVZYjPClsoS6xe2WJZYr7DlssT6hB2QJdYj7IgssbqwQ7LEasKOyRLNhR2UJZoJOypLmAs7LEsY71oG4s13V2UJo5cH8fr43GVZwkhYSea0LGEkzJj6NB3BvWGHZAnD92Fe2SlUTskS+sJhFGJ3w3JIjmS9sKWyhL5wls3uIec1nyktliUC3UTOeXc6oh5eDlES0lbEg6DLc3ZpqyyhLYxPKB/K5wpYKDont7h53mU5i6A9iU9jkyyh/aQlDk5+YnYEBtgmS+gJY8ES+egfGGCjLKE3pbMsBLG8vtG3Idw8f1CF+lHsPfYhTRKwDJMpfYfZ55PzshwXavgUZENI7BOsYvS2FBwedZkSSd5KYxfkPB6Px+Px2MUzbTi7WUXRE4wAAAAASUVORK5CYII=");background-size:cover}#toolPanel .brush-active,#toolPanel .brush:active,#toolPanel .brush:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAJySURBVHgB7ZnRbdswEIZ/qUFbBH3ICN6g7gR1J0g6QZPHon1oR+gEQZEGeUwyQbpBMoKzgTaIXxMgZu58cGDLknwnWfYR4AfQtiiS9meSR9oEEolEIpFIJBL9kME75+GYPuUhAob0XFDOGI/4i99ZgRb4FT4NB3iHGxIdVdwtKH3Fj2wMIz6FWfYtbunVsKHUhNIXq7Q/YZ3sHLN0Dk/Uy07wjBPqnv+l/ANKtzTPNV/ODD893CS72Iv/whV96m8rZZ7wSRPIfPSwVpb5mR1TILsuleP6v6Bg98IW2TnV0odQsFvhpgA1pTnbFIwCrko5AyjYnfC6aJzjlMoMauvy/WVUkXo3wrqlZzArU5aur+tUuGnOytZxkWXpurpcL8cfKNjusrQuQOX0HOh+WJmPBXgrCVyiSjajut91e+vtCWuj8QX1ZrX0KkZZqbINrEuPRrqFLNP/HG6zzrLEI+2c6gJRS1mmX+E2suvoICvV+6KLbFM07iArTfSBU1lpZtM4lpWmNolzWWluU0QgK01ugkhkpdmuRCQrTXchMllpvi0RyspbtCFSWXkbKxHLMva9dMSyjE34LBwhYlnG2sNRyzI24Tf4XMq5jkmWsQkHwz+FDmUZvTALyOHVIuPasg5lGb3wXsV/yFXD2bEss2coO1q6ynD3+lokB7PTejnZcynL6IVzfFy6DjS8L8IlnQGNMD/XqdrGOJJlLD08XLmerjmldybL6LaWMmQfYMGhLKPr4fc0fKeqkgWlOxru99in48yTbAJn6H88nIcbejxayCkwlwu0PH2g5FCwjO3X0lkYzQ689kk2ArlEIpFIJBK+eAGdRGPGDQz7SwAAAABJRU5ErkJggg==")}#toolPanel .mosaicPen{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAOtJREFUaAXtmckNwjAQRcNSBg3QCkVRIXQBZxogghlxQ7Zl8YKSSG8kX2bx8r4PtmYYNAlIQAJLJXCOjT1jvGYet1j/FKNom6L348zN7xrx3tC1N7GSdwz/I8ahEq+6pyJfXaAzcIm83EvRtkXvipweYG6xVEAFIAGvEASIy1UAI4QTqAAEiMtVACOEE6xegdb58w2eb3Fqf/1XrF4BD0DvF61XAUqQ1qsAJUjrVYASpPUqQAnSehWgBGm9ClCCtH7fmOAesWwuTPEnaCzTFRq7sr6Ssq2T7Z2pPiS/zpOdomx3aRKQgAQWSOANmudym8Lt+O8AAAAASUVORK5CYII=");background-size:cover}#toolPanel .mosaicPen:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAXxJREFUaAXtWU1Kw0AUfm90UeyuIih4Add6ATeinkP0TIrnqOLGC+gtFASxu0o2zpgpSUngvaTtS6YtfFkl37zf78tiZh4RHjAABsDAOhlgLfnBS3btvX8MIRxpNilwJv50O+72+2IwlvLtSmDEiuIPtfVlcGZ6X8a+ZhvoxP/5hxw7ruHFh9pAhfkxDfhucr73IQVowkZP0xDXfy6HZ012TWv7z9O3EOhUs3Hawhxfsfi5f88vrQ2swnzPNdfCtzZQs97ADzSwblGgABQwMoBfyEig2R0KmCk0BoACRgLN7uqBptwKmzN0FGByNRRr3fpfSD3QROLiScpyGClV1NhbRJwyhma79QqgAU3aVDgUSMW0lgcKaMykwqFAKqa1PFBAYyYVDgX6ZHr0+iteqVdzbqwCs+KzcF8tVnpXt9NxMkL5cCHez0uOi2D5vf7sadsSi7GywpkoMPOXaJODagNxrBMnI03DBS1ol3gs3jl302VMxAIDYAAMdMfAP+EdVKaWg/p6AAAAAElFTkSuQmCC")}#toolPanel .mosaicPen-active,#toolPanel .mosaicPen:active{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAV9JREFUaAXtmU1KBDEQhauiC9GdIih4Add6BhnmHOKhxHOoeAY9hjAgLkfcTGo6Mo2ZpivW2F3GgZdNJ5VKVfK9XuSHCAUEQAAEahJgLfnx0+c0xngnIqeaz1/Ymfg17ISbt6u9+758u33GZFtN/kTr38TOTC+b+K/5Cp3HRbxtbGdr9lVDXcA3ef4gkv2+wVbb++Tg0urb9Tt6nD+L0EXX3rZDW9G/wyavxx2nx7CAcRJ5RcECvMha40IBKykvPyjgRdYaFwpYSXn5QQEvsta4UMBKystP3U6PmfDwYS6/jddspYtl63+hogLpJDXkMDKEfBF71rn1CmABmZpVqlCgCvYsKRTIYFSpQoEq2LOkUCCDUaUKBapgz5L+cwXS1X65qNvp9DJCzeNCup8vh9B7fzqM6CPbnq+rfWHmWWvpftUFpGed9DJSelzoBvNop8mHEK49YiMmCIAACAwnsARsm0C5E2sdIAAAAABJRU5ErkJggg==")}#toolPanel .separateLine{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAA2CAYAAADgQzjYAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAApSURBVHgB7cixEQAABARBr3H6NEJ9IFWA6C+6WcgUWQ6F7aucCATCLzSr6QQMe0nWygAAAABJRU5ErkJggg==");background-size:cover;width:1px}#toolPanel .text{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAANiSURBVHgB7ZnfUdtAEMZ37zAQlMyIh8zw5yGmA5egVBA6wB0QKiDpADqADuwK4hLoAL8k8BY9xEyIo7usTAzW6Yyc094lk7nfDMx4Ldn+dKvdT3sAkUgkEolE/hYIgRFbe6eIOqOvHheduxPI8xz+V2Sy35fJnp7/iWT3DAITdIXl1t41fWN3IZTTKh+EXGUBoUj2e4bYklTcv+hDQIIJlqCPbXEU8A4CEm6FNWT2NzBbe7mTQSDCCN4kQfV0fkRpPIRABBEspTh67n0EPII0TSEA/gWn3VJIv+koOU2CrLJ3wXI6rQnRSp/Uj1TPZgEXAVK6LkRpPSDZo2oUM+i87oFn/Are3OnOhFQgod9vx2QvP5qHi07He1p7FSzQVn31Zfn/57fbEV2MisNChGPwjFfBiGgKyIvJ7cX8hdb63Hg/9d2T/Qm2W8nB4guFODBP0xpPwSPeBNusJKK6rAQmn6+sxctjT/a3woaV1KDHD/etcZiCoRkTP7begye8CJavdg8t6Ty0Has2Ni5CFi8/K6yw9gSkCm1/2M/HuQa4NKLeihe/4FnvrVpJSuersvcuO0VgEax4sQuWUmZmDKHWfio83NthipeHlK5byaKAUdNZoYoXr2CbldR6+Fw6z7EVL4H80xBWwVYriXqw0smW4kWve9zFi1Vwk5Vs/DGW4sU9DeETbB/jrLa6vymLF63q1WKMexqyBkzYxjg09O7JZPcT/BHYnSXzE7NRroKcZWjPNoi3DNkZ0aNicvMWGGBJ6SVWkhG+US7PPWyxktxwFa/2KU29l+7f68UQ3YE59d9W+0VU8btGiGUfqnXRerCSlSJDV1GdFHertyMbtK36gZ6aFv00S/FiSGk3K9n4qevrNWEc+1DtBLewko2Q8/Ixym0lWAjRrwVXtZIr4GOU26pomb23HOOoyc0BMCKT/a/0yYtOi+zql21wxH2FLVaSbOAImOEe5ToLtlpJcyrJAPco1zmlQ6Tz43fN/Hi1OFJP3nbpyU4rbLWSGtlX9/GjGachbildYH1HUKkL8MSSUa7T9qqT4HISYURGLL13GUtGueCAk2Dqj+NqRHtL5zmqKM6oYo+ffgOcgwNuRSvtpnJ6X1q/N3TFhtPJDcvDeSOzBxXISKx12yYSiUQikci/zS+amzngvBJLrAAAAABJRU5ErkJggg==");background-size:cover}#toolPanel .text-active,#toolPanel .text:active,#toolPanel .text:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAALxSURBVHgB7ZnfcRoxEMa/498zqSDnDijhOkg6CK+Jk0mowE4FNsMQv5IOSAVxCXQQOgh5tRMUifPZ3GnhjLS7ftFvxnhOcMCHVrufVkAikUgkEomXIoM2N+YCBoX9W+MOE0yyDRTpQZO5GWOLy8frAf7Yxy9QpANdLhrX73BlhlBET/DcjOxj3hgdoo8xFNGc4c+gv8EbKKIpuCBHXQKbmQJK6AguBeU4/C3eQgkdwR2bnI6jlrzkBZdCxi2vGqKrM8vyggeEEGMNR5NeaxSwIC84I4R0sbTjt7Uxl7zK0iWKrOArk++E7OOEvs/W+IevxB3iYS0ruE+G8/fd/0/ZrX1s+mi6VjMiKzjzBGxwni0er7aYNp4fStdkOcG0lVyi/ulL776u57dZkZxhPzy3D+FccZ6tyOQlWJMlBRe1q8zuf8t1W2eLH97YQG7LKCN4ZlyyymtjhhDmuMcCislLRjC1A+rgmnyt63g0Q10wefELdrXXt5KrXe09jFry4hc8ILeB06P3uLWtlLz4BVNWstMQQ6GUvHgFU1YSVsjxcC6hkxd7N4RXcJ/0wks8Bzp5jbiTF6/gNivZjv/jMHdD+ATTbZznzW5FaUxWjVHWbghfI55u44zwzfzEKWztj1Y/D6lauddggPPkoSDGRjaJnQZ1+FMaGRbBPCFNWUlOGFu5PII1mulMySv+9NDV3gF+NUY38GvqqeTee97hLPa0MX4N01ZycmI58pmZSzur+36aJXnFh3SolWzjLyGMYenECY6xkm240BVo5cYJ7pEnCqeZjWMItHLjktbcuGSV773bGh+yM3AyN7/h1u8Tzq6+QiDhM0xZScOwdpswt3LDBVNW0t/txMPcyo1Zw0Xt6lBXMhbmVm6YYLoryT+7FYzdkDDBHbL2LiAF3Q0JOl4NDel6LaxOBKU41MoNIEywW6/7SIZzRc86r/rnThFAWB12CaO/s36v4ZzVx4xlr9rKjXV29zZhSSXIRCKRSCQSovwHybzXUxgaB2wAAAAASUVORK5CYII=")}#toolPanel .save{background-size:cover}#toolPanel .save,#toolPanel .save:active,#toolPanel .save:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAK8SURBVHgB7ZpRTtswGMf/tgsrpUzRnlqeshtwhPYG2xF2grGnPVJuUE6wM+wEYyeAPe6J8LCBtIdFKmhdS+PZliaaVK0TJ3ZK8E8CtV+b2L/Yce3PATwej+cJweCaIAgoffWR7XbfJKz7HQ93MRzSgmPYrHMBgpCLf4zhaAEM4RACl7R7IWP0ajm0WPAQ05trOILimeGFm44XbjpeuOl44abjhZuOF246Xjg3YiGv/lxTslwjYbrXf8/m+1ds3vlNO4cncESq3L3+MQwoLhyEAaFkDHB1lQnByIW0LCNVLiUnJi1t2KVJKg9lW1rJijIyYaNuXVw4jmKO5DQbtiW9RlaWd4o4LpwANGrh5P5mrApcrUSl0ptkH+5+jmCA8SgtC7QpbUNWnRclsCVtS1adGyWpWtqmrDo/KqAqaduyqgxURFlpF7KSSveWktnknL04kLsZg+W4qPSA7ByAc/6NUpKaIXGOMd19eexCVlL5ZtpGaUoC8cFRKi5jBCvTRBuyEr2wwW7fWumM7NpYEdmC9dPuHpru9skKt7qHsssWGqmLtmzR+m3ePaxgt09Ij/JKF+7GBvWzngBYN3pnsXXPZnGS8dBJu5KVOEvxbPiddiYrcZrTWpbmYqFJwT+4lJU4f8ZDCQbBWL5ODNazZXEurKhB9D8+TZtiehtlQ60Wf43tIVyJaOYIOVqYn6feceIsLauDUfpp+T0Hv9Qdo72HheBXOfF/jJAB2+9/ETMaOdpGqAcxw1IXPlwOEvAz3YH6B9NEHprO/l4QQkJsMaJ1I5Fc1N5u+i4t0rKM0LfZXPQ2IX/TE8g66sk1Ss/vf1yKLw7FAj7ClqFaFmQIUcc838+dAEjmk1vOup9bFNeigJ64F3qoEXnxRfbkbLHz5x0mv6K8x5V6uLQtlmeogWl7Gtc5efF4PB6PpyL+AYIPPUb9sB23AAAAAElFTkSuQmCC")}#toolPanel .close{background-size:cover}#toolPanel .close,#toolPanel .close:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAG2SURBVHgB7dpBboMwEIVhiLquyqLXibhZ6c1QLtIDdEFPAOUtkKIEkMee95zF/FKUKk0FX4xU7LhpoiiKoiiKoqhOP33/gUdTudzzuFjePF2vX+/LMuGBn5tKlZxHm/rGaf005/UA969dlmXobrfvRhiAc9sO969d2rbrxvEv5e9NI/wYDqwc6T2stWQwPsH1YE+jqUIfYXFOqaOLki/prd++H9ZL+QnIvLzPsJ/jODSGzGCkRHtiURYYKdDeWJQNRkw0A4uKwIiBZmFRMRh5oplY5AJGHmg2FrmBUQlagUWuYJSDVmGROxhZ0EosooBRClqNRTQwOkPjWY1FVDA6Qu/FxiI6GKWgFVgkAaMztAqLihYALL3N85LzO+8kI5yyUqFaLqKDLcsyCjQVfPZ/Fs/qlRNEA6fcVNRYLqKALXdQarQ7OOd2UYl2BZfcG6vQbmCPiYAC7QL2nPWw0cVgxhSPiS4CM+ezLHQ2WDF5Z6CzwMqVCm+0GVxjWcYTbQLXwG55oYt2ACDl5P0QLdwBIMMiHGvvS3lL2TsA1NitR7R1B4A5XNrTC2xbepXziKIoiqIoOuwfOs4hnf5I1CMAAAAASUVORK5CYII=")}#toolPanel .undo,#toolPanel .undo-disabled{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAMVSURBVHgB7ZrPbtNAEMa/3bVj3CQUNWmjtqoa7vTEiT4AvbSvyUNwoZyQEOXSikNEJTi0ARqQkBunTuwd1hEtdkOzzl850f5u9nq8/ry7s+MZAwaDwWAwGAxzgmFSVqqbgL2FiHsILhrIORYmoFCqPQsl3+8fCAlZrDlofz9FjuEYE8vdfnEn9hbCLnLOGCO8XhKudSCZrAy28SZyzoiCH68Jlx8QQ/l+iyR+is7FCXJOZqeVWq/JG0gKIkEf8752b8kkOF6vagrvDRgz6kYRjlEKf2JetDYC4FMXY6IVbDkbL6UQdeQIRsxjJJvhTfQBuLoexVYMb96uwGH7yBsMDjFW4Zaok4smut1OVlPNtrTqqWkbIKcQo7KQxSOUy5WsNpoRvoqIFSXjbAe5hQkunR0Kdxrx82qvRhbUG1Rv8pCIOSnjvtNib1Dq/cK8CIKCiFb2CXwzeVoCJ/Cb2m1xhFi6WhauOCTGB/dgwY/hzTeOFiu1o6To/stvr73SeXDNlE7idyl0v3KL1dXd0yNNVLfsMmTvem6RFvXcJrNFYqtkggp+B732j2F2IwiOiUXvNrjt11QHqZEmYIsKxa6uw+nhd7ld3Eo+BzEZqf7Ph1mNKDhGObJeu0HWakFNo1qyJUuH04S4C8b/xQichKDQOxtmM/bXkoqb3/UdRRJpe5gngZOK8OJtSmcyxggnUGuW+COPRDyl+Tk6l+8xVxwrvY7Vc6w+asD3H3RcEyUA+gStBgLkPtNxy/hTekExgpcdI3jZMYKXHSN42TGClx0jeKFYQWngXKs19BN1sQVH6RpXnNfSmSy0YAv20+RxBHmps1lgweslKe7Vo0P7i85qYQXHNeqBk0GgzZpOnvEYRrWqzTGNjI+SgHiusqSp8oqUpLIuLW1ObUaC478E+BH5fPqC0U8Jp4iribjpZSrGz0awW9hTKduZiL1PvyB/c/0a8DJlTGc7pWdMPLJ/xWYuyE+Wpn2I0Pn9v5LMtJAkPVUfPqNO8S3wbaRc+OQ/pg1jFk6r9UQFF59zW7M2GAwGg8FguOMPg6ATjq272toAAAAASUVORK5CYII=");background-size:cover}#toolPanel .undo:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAKwSURBVHgB7ZphbtowFMef7aajjTTxZVJLv2QnGL0BnID1BvQEYydoe4K2N2hPwG4AO8G2Eyz70FFpXyINOiaw356RJlHDcBJIlkT+SfkQO8/4j59fbL8AOBwOh8PhcOSEgG2pHbX4/ssuXQHOfn6GKsMPjt8Jv4F/L7rvQcHhkBLun1wzzm6WyxiHDhScPUhK7SjYE7yPgE2zijH2EQoOS/S0f9IUiH2yClYaYng7H4+q49KL+Qr4yRSLABEHfF8GsZpYI7yYr4DrBEXA8VzOML/oXJtGEEURpMQqWBw2tAu/hWIR0jWUUl3B9DFMYrhZsJ6z2o2LS8hhdjab/IjtYZvnsOeF9J+kdp8cCBR4A89/1YxrsFlwFEYI5DbFpk6i+1Cv1+M8HCtoeeTaCmBAMdlsdBG0vByDlhSCBKpr6npruRwRrtTT90ubffz3MC04OGcDWlwEq5WqKyeP95Ajwj8eGKIj6T29tkXw+EtLioZKYRsRwzXN3PHDxgXkiJR4bhTV+e+Drs0u2Vpai95/cUoONDSrGIPLXDcPi9fR835QH1o2s+SbBwpkcjJqk2vfmlVxfnC38HujA2+sFpCS+fihRwKfRXDaLYWQIxLADJaBzSbZ5mENwj/qAvIOif0yH9uj5E6hQCoE/7pcRHM7gOno279Mthb8X0khOLVLlxUnuOo4wVXHCa46TnDVcYKrjhNcMoKVkg0bB02pBQshAqPIeqRc7hFG7Bj31uxleQXTXnglBcTwg82stIJ1jtoskxKGVjvIEj0Ku4dOOdgFpWnN9MpdnMRaNoL10Qvng3WJ8yxAwFBJjJUSysSluRC9/MRCpICfxU2bljpKL0YWWBsmDztKl6ZESXmzPiWzG3Tb+kxceb9Ok4jVZHpMW8sgaE23/OTB4XA4HA6HIzf+AELL5fDBKGTPAAAAAElFTkSuQmCC")}#toolPanel .confirm{background-size:cover}#toolPanel .confirm,#toolPanel .confirm:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAALrSURBVHgB7ZlNctpAEIV7RPhx8IIjeGviVMEJHG5grxKchcUJQk4QcgI7JzAsAtk5N8CcAKfKga2PwAJVDJQ06Ra2y4hBaIRURlR/O3pGo3makfSeAGAYhmEYhmEYhmEYELBD5O9+mpAyjsF2etbR56aqz84IfjvsfBMSGs8Fx6mpRBuwAyyJJWilFbyBhJMfts/BK5awoafqn+gtjfdsCQyj763jan8fv6s2VMckdkvPxYquty5A/lgldt6eQHL9zoGRhS5O/sDT1LKKVdPv2MQJXi1W3FrFT+V1xydqS/us7H168q8SZIzErHChf1WYZnN9lVhbQOXhsHofZJzErPAsu9fdVCyRCMH5YecKQJY8ZW2xxNYLzg9+XaCxMBercoTW8VRXLLHVgskyorj6UoMjK+iTbyEEWytY6Y8JB2phxRJbKXiVWLKM1lG1CRuw8rVEr4FZOnNiz4ybh7L+vRKWeRgQTW/dzx/roBRML/hUVqIpFwW3kw2V8fvqDcRMmDCgi3JLp9L0oJiLJWRKXLuTiZGwYUAXpWAp8LG/WCnglb+mlYcYoHEljv/yIj/SGhfP6hAhSsGZ6fQSRXqfhLjNoRu1aP8w4J98wqAUPCrXRunJpBK36CjCgC6+4SE3xAlJ9dWnCdGFgZBEFQZ08X0P00kdPLnESSy2yBKZeZo0hCSqMKDLWuPhKzqTu4AQRBkGdAnktGgSAs26a9pfIsB0zb0GUYcBXQJbS/Kvwhanyy2yPjf564kjDOii5aVdt4Xm3Vsn37tOdFxhQBft8OCad0d+9dZJzN6grTQJcYYBXUJ/09r/22lIAcurKgzTOvzYevoZdxjQZaOPeKtESxC/Qdp/hIH/70j4sHTSVxLrnhs2ZP+ufSkN8SVofzcMROyPdYjkM21+0G7iUOcBurbi8Mc6RPLFwyqembRN/fq4D6hXFuvOAyKEvLeQ8kSAcYxbt4D38kiC08tOJs1NfDfDMAzDMAyTBP4D55plBOlQMmwAAAAASUVORK5CYII=")}.__screenshot-lock-scroll{height:100%!important;margin:0;overflow:hidden!important}.ico-panel{border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid #fff;height:0;left:23px;position:absolute;top:0;transform:rotate(180deg);width:0;z-index:9999}.ico-panel img{height:100%;width:100%}#optionPanel{background:#fff;border-radius:5px;box-sizing:content-box;height:20px;left:0;padding:10px;position:absolute;top:6px;z-index:9999}#optionPanel .brush-select-panel{float:left;height:20px}#optionPanel .brush-select-panel .item-panel{float:left;height:20px;margin-right:18px;width:20px}#optionPanel .brush-select-panel .item-panel:first-child{margin-left:2px}#optionPanel .brush-select-panel .item-panel:last-child{margin-right:0}#optionPanel .brush-select-panel .brush-small{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKlJREFUeNrs18EKgkAUhWEnwmW1amObHqKeo0ftOfIh3OSmlba0xXSEK4SICAoz4X/gINwL8sE4C533Pok5myTyAAQIECBAgAAB/jdwO/cFO3dsH3v1qmY2LtWHWr/9KyxQOag3Nf2ZnQ17V6vQR3zp4bqktgv+DWYjuxO3eELKkd0zBmCuNgPzxnbBgZXd1kL9WIslbnAbx38xQIAAAQIECBDgqoFfAQYAhLQbgzDvXkAAAAAASUVORK5CYII=");background-size:cover}#optionPanel .brush-select-panel .brush-small-active,#optionPanel .brush-select-panel .brush-small:active,#optionPanel .brush-select-panel .brush-small:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAALhJREFUeNpi/P//P8NgBkwMgxyMOnDUgaMOHHXgqANHHTjqwFEHDm0HslBqAB+jGIhSBeIOIHaBCu8B4gogvv3p/yuKzGektMEKdKA6kDoBxAJoUh+A2ALowJsDHcVtWBzHABVro9RwaoTgRxCFQ/oLMAR5R3MxAbAHj9yuweDAamiGYMCSSaoHgwNvgHIrEK8D4s9QvA4qdmPAM8loVTfqwFEHjjpw1IGjDhx14KgDRx04pB0IEGAAHeMoHW2kl/cAAAAASUVORK5CYII=")}#optionPanel .brush-select-panel .brush-medium{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAS9JREFUeNrs2EsLgkAQB/BWupQQHXpczbp36/EB6ptH1M2D17RLhx6XQG9lszCBxEa5zoTQDPxvjv52RR1UWZbVqlxOreIlQAEKUID/Dqx/e2BL9d4t0MP0IS7kBkkgZ0iMub82XrMjLdBQGjXTdgO6jRlpC2QDiX51ixVkClkacMbNhyywR/0COIGMLfrG2MsK9C1xeaTPBdTHzgkezHmR6zoFd88lAOpzDDmAHuHrzeMA9giBXQ5ggxDY5ADeq/4tTgmvm3IAL4TAEwcwJgTGHMAdTillK8FzsTwkawLgGkcylm+xXnlQAhcU2T3baWYLCS36QuzlmahzpX/mrCAHnPE+zYRXhO1strzMRK0n5D0OEQNIJzdMPEf+CGHWL3klf7cEKEABClCApeohwADD8zb9WRTsHgAAAABJRU5ErkJggg==");background-size:cover}#optionPanel .brush-select-panel .brush-medium-active,#optionPanel .brush-select-panel .brush-medium:active,#optionPanel .brush-select-panel .brush-medium:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAU9JREFUeNpi/P//P8NgBkwMgxyMOnDUgaMOHHXgSHcgC7EK+RjFsAmzAXEAFFsCsRQQ/wLiJ0B8HojXA/FGqBgK+PT/FVH2MhJb1WFxYCAQdwGxCgGtd4C4HIjXkeNAcqKYGYg7oRaqEKEepGYtVA8zzaIYCbQBcRkZ+mB6ymmZSULIdByyI0NI0UBKGgRliLtALENhxnwKxErANPiL2iEYSgXHgYA0EIfRIooDqFi8BdDCgaZUdKAJLRwoQUUHStLCgb8YBgCQ4sDnVLT3OS0ceImKDjxDCwduoKIDN9DCgauhrRRKwVOoWTTJJEVUcGAhEP+kVV0M8nk3BY7rJiX0yG1uVQLxFDL0TYXqpXmT/y8Q50JbJXeIUH8HWo/nQPWSBChpUcOa/KHQ1rUxtCEAywhnoU3+1XRp8o/26kYdOOrAUQeOOnDUgVgBQIABAPYuSgtJpajwAAAAAElFTkSuQmCC")}#optionPanel .brush-select-panel .brush-big{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAaNJREFUeNrcmMFKw0AQhpOqRdGUCloD2lMv1T6B6RMI4sOK4BM0b1Clh56skFahpVaUaln/wBQkzKYmTbJTB75TSPJlN7uzM7ZSypIc9sYIVuxa0nsdUAcuqIIDUKZrczADExCAJ/CW5OFTNUolaIMGaIGThB80BF3QByoPwVPQptFaJ8JR7YDnrAS3gAfOM/69HoEPFusI7oIrcJzTGngB9+AzjWAod5PBlP5lym+jkqsEt8E1qBW0m4Q2d+A7KljS3OAVKGfRuzzuQkmzWpsG9uQmvTtW0KatxFS0yUEr2ChgUcRFlRy0ghcC0m9LJ+hQXjUdYQqtcIJ1QYeYM07QFSTocoKHggSrnOC+IEGHEywLEtyJyySi4rfgXJDXFyf4LkhwxgmOBQmOOcFAkGDACQ4ECQ44wamQURySC7vNPAgQ7MYdt/pUxJiKCTloBRUV1abCj3YduEwSVvw9A3I9bqHqUl2HSsGiYqSbuY0t3JexR62Po5zkXqn18ZG2N7PsMlxaQptH0TrBs7Jpv/mrMte/bGByx/LiWsBSQ7zgjwADAPqYqQ1c9nN+AAAAAElFTkSuQmCC");background-size:cover}#optionPanel .brush-select-panel .brush-big-active,#optionPanel .brush-select-panel .brush-big:active,#optionPanel .brush-select-panel .brush-big:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAhRJREFUeNrUmLtPAkEQh+/UghCxw06JNuCjJURBK+OjsNVEW4KF6P+iYKGF9rYWhmClKKGg8wGNRu2kA4M25PyNGRKFPb0Fjlsm+SKG3MyXLLezs7phGJrK0acpHgP1D0P6sOyzY2AJRMAE8AEPf1cBz+ABZEAKPMkkLxtv33/1+hJbFOwHayAOZuh5i/WoSBYkwSmo2SG4ABIg0OaqFcAOuLAiaOU36AKHIN0BOY1zpDmnq92XxAsuQcyG33+Mc3tbFaQHr0DQxpc0yDW8soJucAb8XdhJ/FzLLSO4B0Jd3O5CXNOSIL2tUQf25CjX/lOQ/t93sHEkeK81FVznruBUBLgRmApuK9B+42aC1FtnFRCkFjouElyW6K12hs6HkCbBsEKnrLBIcEohwUmR4IhCgj6RoEchwcGeOfL/FKwo5PUuEnxVSPBFJHivkOCdSDCjkOC1SDDF05fTYbBLk+AjuFFAMMsuwm3mQAHB5K/G3DAX02HxtkPjZasz8zQN9mZzcY2Haqdit/HWQdRJaOI/cUDumAd6S1MdnWpzXZTLma2cmWAVrIJiF+SKXKsqe7NQAvMgb6NcnmuUWrn6oKBXaQ4c2SBHOSNcQ2tVkOIDbIHFDi15kXNRzk+Z49Z/keaxYIN3e9m2SM9sco605QlK8oZVaxhTV3iZaGMfpTT8XZmPTAU+hJxr7V4B98KJWsn4EmAAKPJ2SXt/mW0AAAAASUVORK5CYII=")}#optionPanel .right-panel{align-items:center;display:flex;float:left;margin-left:39px}#optionPanel .right-panel .color-panel{background:#fff;border:1px solid #e5e6e5;border-radius:5px;display:flex;flex-wrap:wrap;justify-content:center;position:absolute;right:28px;top:-225px;width:72px}#optionPanel .right-panel .color-panel .color-item{height:20px;margin-bottom:5px;width:62px}#optionPanel .right-panel .color-panel .color-item:first-child{background:#f53440;margin-top:5px}#optionPanel .right-panel .color-panel .color-item:nth-child(2){background:#f65e95}#optionPanel .right-panel .color-panel .color-item:nth-child(3){background:#d254cf}#optionPanel .right-panel .color-panel .color-item:nth-child(4){background:#12a9d7}#optionPanel .right-panel .color-panel .color-item:nth-child(5){background:#30a345}#optionPanel .right-panel .color-panel .color-item:nth-child(6){background:#facf50}#optionPanel .right-panel .color-panel .color-item:nth-child(7){background:#f66632}#optionPanel .right-panel .color-panel .color-item:nth-child(8){background:#989998}#optionPanel .right-panel .color-panel .color-item:nth-child(9){background:#000}#optionPanel .right-panel .color-panel .color-item:nth-child(10){background:#feffff;border:1px solid #e5e6e5}#optionPanel .right-panel .color-select-panel{background:#f53340;border:1px solid #e5e6e5;height:20px;width:62px}#optionPanel .right-panel .pull-down-arrow{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAQCAYAAAABOs/SAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANNJREFUeNq01TEKwjAUxvHXOAhKJ3Fwc9PVzbWipxCdHLyMV9AD6A2EegRdvYBOnd3E70ELIcT2JU0C/1BI4AeB8pKUhlMiOqAtKijuGqEj2ne61D/jY1V2QZ+IaI7maKywrdETzdAVDSKi/Lp3tGP4hRYRcRPlly1Uech4FgG3onygtEvvwDijNxtqwiHxCp3YUBscAm9E/8FtcBFaB/vgYrQJdsGdUAkswZ1RKVyH6+hDivJKMCTa/CY9DV26DBlX2MTJB/WFK/yEvmjjM05/AgwANuZSRB8r5twAAAAASUVORK5CYII=");background-size:cover;height:8px;margin-left:10px;width:15px}#cutBoxSizePanel{align-items:center;background:rgba(0,0,0,.4);border-radius:3px;color:#fff;display:flex;font-size:14px;height:25px;justify-content:center;width:85px}#cutBoxSizePanel,#textInputPanel{left:0;position:absolute;top:0;z-index:9999}#textInputPanel{border:none;box-sizing:border-box;font-weight:700;margin:0;min-height:20px;min-width:20px;outline:none;padding:0}.hidden-screen-shot-scroll{height:100vh;overflow:hidden;width:100vw}</style></head>
-  <div bis_skin_checked="1"><template shadowrootmode="open"><div id="plasmo-shadow-container" style="z-index: 2147483647; position: absolute;"><div id="plasmo-mount-container" data-v-app="" style="display: flex; position: relative; top: 0px; left: 0px;"></div></div></template></div><body __processed_c3d96aeb-3a89-482c-bcb6-0fd69262005e__="true" bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWllZ29tY29uIiwiYWRibG9ja2VyU3RhdHVzIjp7IkRJU1BMQVkiOiJlbmFibGVkIiwiRkFDRUJPT0siOiJlbmFibGVkIiwiVFdJVFRFUiI6ImVuYWJsZWQiLCJSRURESVQiOiJlbmFibGVkIiwiUElOVEVSRVNUIjoiZW5hYmxlZCIsIklOU1RBR1JBTSI6ImVuYWJsZWQiLCJUSUtUT0siOiJlbmFibGVkIiwiTElOS0VESU4iOiJlbmFibGVkIiwiQ09ORklHIjoiZGlzYWJsZWQifSwidmVyc2lvbiI6IjIuMy4wIiwic2NvcmUiOjIwMzAwMH1d">
-    <div id="loading" bis_skin_checked="1" style="display: none;">
-      <div class="dot" bis_skin_checked="1"></div>
-      <div class="dot" bis_skin_checked="1"></div>
-      <div class="dot" bis_skin_checked="1"></div>
-    </div>
-    <div id="error" bis_skin_checked="1" style="display: none;">Conexão perdida com a câmera.</div>
-    <div id="video-wrap" bis_skin_checked="1" style="width: 100vw; height: 100vh; top: 0px; left: 0px; transform: none;">
-      <video id="video" autoplay="" muted="" playsinline="true" webkit-playsinline="true"></video>
-      <div id="camera-info" bis_skin_checked="1">
-        <img id="logo" src="./Camera ao vivo_files/logo_cor_branco.9c2fdd1b6e83.png" alt="Logo Prefeitura do Rio">
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">STUDIO</a>
+        <nav>
+            <a href="#servicos">Serviços</a>
+            <a href="#sobre">Sobre</a>
+            <a href="#contato">Contato</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="tagline">Precisão e Corte</div>
+        <h1>Feito sob medida.<br><span>Feito para durar.</span></h1>
+        <p class="subtext">Desenvolvimento de sistemas, infraestrutura e soluções digitais sem enrolação. Onde a engenharia encontra a prática.</p>
         
-      </div>
-    </div>
-    <script>
-      const video = document.getElementById('video');
-      const loading = document.getElementById('loading');
-      const errorDiv = document.getElementById('error');
-      const videoWrap = document.getElementById('video-wrap');
-      const cameraInfo = document.getElementById('camera-info');
-      const startUrl = "/api/camera/player/session/start/000567/";
-      const heartbeatUrl = "/api/camera/player/session/heartbeat/";
-      const stopUrl = "/api/camera/player/session/stop/";
-      const whepBaseUrl = "/api/camera/player/whep/";
-      const envIceServers = [];
-      let sessionId = null;
-      let pc = null;
-      let heartbeatInterval = null;
-      let reconnectTimer = null;
-      let disconnectTimer = null;
-      let firstFrameTimer = null;
-      let playbackStream = new MediaStream();
-      let discoveredIceServers = [];
-      const RECONNECT_DELAY = 5000;
-      const DISCONNECT_GRACE_DELAY = 8000;
-      const FIRST_FRAME_TIMEOUT = 12000;
-
-      video.muted = true;
-      video.autoplay = true;
-      video.playsInline = true;
-      video.setAttribute('playsinline', 'true');
-      video.setAttribute('webkit-playsinline', 'true');
-
-      document.addEventListener('contextmenu', (event) => {
-        event.preventDefault();
-      }, { passive: false });
-
-      document.addEventListener('selectstart', (event) => {
-        event.preventDefault();
-      }, { passive: false });
-
-      document.addEventListener('dragstart', (event) => {
-        event.preventDefault();
-      }, { passive: false });
-
-      function applyVideoOrientation() {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        if (h > w) {
-          // Portrait: rotate wrap so video appears landscape.
-          videoWrap.style.width = h + 'px';
-          videoWrap.style.height = w + 'px';
-          videoWrap.style.top = ((h - w) / 2) + 'px';
-          videoWrap.style.left = ((w - h) / 2) + 'px';
-          videoWrap.style.transform = 'rotate(90deg)';
-          videoWrap.style.transformOrigin = 'center center';
-        } else {
-          // Landscape: normal.
-          videoWrap.style.width = '100vw';
-          videoWrap.style.height = '100vh';
-          videoWrap.style.top = '0';
-          videoWrap.style.left = '0';
-          videoWrap.style.transform = 'none';
-        }
-      }
-
-      function clearDisconnectTimer() {
-        if (disconnectTimer) { clearTimeout(disconnectTimer); disconnectTimer = null; }
-      }
-
-      function clearFirstFrameTimer() {
-        if (firstFrameTimer) { clearTimeout(firstFrameTimer); firstFrameTimer = null; }
-      }
-
-      function showError(message) {
-        loading.style.display = 'none';
-        errorDiv.textContent = message || 'Conexão perdida com a câmera.';
-        errorDiv.style.display = 'block';
-      }
-
-      async function ensurePlayback() {
-        try { await video.play(); } catch (e) { console.warn('[PLAYER] play() falhou:', e); }
-      }
-
-      // O app injeta o passe do Firebase App Check em window.__CORAppCheck; nunca vai no endereço.
-      function comPasseDoApp(headers) {
-        return window.__CORAppCheck ? { ...headers, 'X-Firebase-AppCheck': window.__CORAppCheck } : headers;
-      }
-
-      async function startSession() {
-        const response = await fetch(startUrl, {
-          method: 'POST',
-          headers: comPasseDoApp({ 'Content-Type': 'application/json' }),
-          body: '{}'
-        });
-        const rawBody = await response.text();
-        let data = {};
-        try { data = rawBody ? JSON.parse(rawBody) : {}; } catch (e) {}
-        if (!response.ok) throw new Error(data.error || rawBody || 'Erro ao registrar sessão.');
-        sessionId = data.sessionId || null;
-        if (!sessionId) throw new Error('Sessão de vídeo inválida.');
-        startHeartbeat();
-      }
-
-      function startHeartbeat() {
-        stopHeartbeat();
-        heartbeatInterval = setInterval(() => {
-          if (!sessionId) return;
-          fetch(heartbeatUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sessionId }) }).catch(() => {});
-        }, 20000);
-      }
-
-      function stopHeartbeat() {
-        if (heartbeatInterval) { clearInterval(heartbeatInterval); heartbeatInterval = null; }
-      }
-
-      function stopSession() {
-        stopHeartbeat();
-        if (!sessionId) return;
-        fetch(stopUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sessionId }) }).catch(() => {});
-        sessionId = null;
-      }
-
-      function cleanup() {
-        clearDisconnectTimer();
-        clearFirstFrameTimer();
-        if (pc) {
-          pc.ontrack = null;
-          pc.onconnectionstatechange = null;
-          pc.oniceconnectionstatechange = null;
-          pc.close();
-          pc = null;
-        }
-        playbackStream = new MediaStream();
-        video.srcObject = null;
-        stopSession();
-      }
-
-      function scheduleReconnect(message, delay = RECONNECT_DELAY) {
-        showError(message || 'Conexão perdida. Reconectando...');
-        if (reconnectTimer) return;
-        reconnectTimer = setTimeout(() => {
-          reconnectTimer = null;
-          errorDiv.style.display = 'none';
-          loading.style.display = 'flex';
-          startWhep();
-        }, delay);
-      }
-
-      function armDisconnectedRecovery() {
-        if (disconnectTimer) return;
-        disconnectTimer = setTimeout(() => {
-          disconnectTimer = null;
-          if (!pc) return;
-          if (pc.connectionState === 'disconnected' || pc.iceConnectionState === 'disconnected') {
-            cleanup();
-            scheduleReconnect('Conexão perdida. Reconectando...');
-          }
-        }, DISCONNECT_GRACE_DELAY);
-      }
-
-      function waitForIceGathering(peerConnection) {
-        return new Promise((resolve) => {
-          if (peerConnection.iceGatheringState === 'complete') { resolve(); return; }
-          const timeout = setTimeout(() => resolve(), 3000);
-          peerConnection.addEventListener('icegatheringstatechange', () => {
-            if (peerConnection.iceGatheringState === 'complete') { clearTimeout(timeout); resolve(); }
-          });
-        });
-      }
-
-      function handleFirstFrame() {
-        if (video.videoWidth > 0 && video.videoHeight > 0) {
-          clearFirstFrameTimer();
-          clearDisconnectTimer();
-          loading.style.display = 'none';
-          errorDiv.style.display = 'none';
-        }
-      }
-
-      function parseWhepIceServers(linkHeader) {
-        if (!linkHeader) return [];
-        const servers = [];
-        for (const part of linkHeader.split(/,(?=\s*<)/)) {
-          const urlMatch = part.match(/<([^>]+)>/);
-          if (!urlMatch) continue;
-          if (!part.match(/rel\s*=\s*"ice-server"/i)) continue;
-          const server = { urls: urlMatch[1] };
-          const u = part.match(/username\s*=\s*"([^"]+)"/i);
-          const c = part.match(/credential\s*=\s*"([^"]+)"/i);
-          if (u) server.username = u[1];
-          if (c) server.credential = c[1];
-          servers.push(server);
-        }
-        return servers;
-      }
-
-      function buildIceConfig() {
-        const defaults = [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' }];
-        const extra = [...envIceServers, ...discoveredIceServers];
-        return extra.length > 0 ? extra : defaults;
-      }
-
-      async function startWhep() {
-        cleanup();
-        loading.style.display = 'flex';
-        errorDiv.style.display = 'none';
-        try { await startSession(); } catch (e) { scheduleReconnect(e.message || 'Erro ao iniciar sessão da câmera.'); return; }
-
-        const hadDiscoveredIceServers = discoveredIceServers.length > 0;
-        const iceServers = buildIceConfig();
-        console.log('[PLAYER] ICE servers:', JSON.stringify(iceServers));
-
-        pc = new RTCPeerConnection({ bundlePolicy: 'max-bundle', iceServers });
-        pc.addTransceiver('video', { direction: 'recvonly' });
-        pc.addTransceiver('audio', { direction: 'recvonly' });
-
-        pc.ontrack = async (event) => {
-          if (event.track.kind === 'video') {
-            playbackStream = new MediaStream([event.track]);
-            video.srcObject = playbackStream;
-            await ensurePlayback();
-          }
-          
-        };
-        
-        video.onpause = () => { if (pc && video.srcObject) ensurePlayback(); };
-
-        pc.onicecandidate = (e) => {
-          if (e.candidate) console.log('[PLAYER] ICE candidate:', e.candidate.type, e.candidate.protocol);
-        };
-
-        video.onloadedmetadata = ensurePlayback;
-        video.onloadeddata = handleFirstFrame;
-        video.onresize = handleFirstFrame;
-        if (typeof video.requestVideoFrameCallback === 'function') {
-          const pump = () => { video.requestVideoFrameCallback(() => { handleFirstFrame(); pump(); }); };
-          pump();
-        }
-
-        pc.oniceconnectionstatechange = () => {
-          const s = pc ? pc.iceConnectionState : 'closed';
-          console.log('[PLAYER] ICE:', s);
-          if (s === 'failed') { cleanup(); scheduleReconnect('Conexão perdida. Reconectando...'); return; }
-          if (s === 'disconnected') { armDisconnectedRecovery(); return; }
-          if (s === 'connected' || s === 'completed') clearDisconnectTimer();
-        };
-
-        pc.onconnectionstatechange = () => {
-          const s = pc ? pc.connectionState : 'closed';
-          console.log('[PLAYER] conn:', s);
-          if (s === 'failed' || s === 'closed') { cleanup(); scheduleReconnect('Conexão perdida. Reconectando...'); return; }
-          if (s === 'disconnected') { armDisconnectedRecovery(); return; }
-          if (s === 'connected') clearDisconnectTimer();
-        };
-
-        try {
-          const offer = await pc.createOffer();
-          await pc.setLocalDescription(offer);
-          await waitForIceGathering(pc);
-
-          const response = await fetch(whepBaseUrl, {
-            method: 'POST',
-            headers: comPasseDoApp({ 'Content-Type': 'application/sdp', 'X-Camera-Session': sessionId }),
-            body: pc.localDescription.sdp
-          });
-          const answerSdp = await response.text();
-          if (!response.ok) throw new Error(answerSdp || 'Erro na negociação com o servidor de vídeo.');
-
-          const whepIceServers = parseWhepIceServers(response.headers.get('Link'));
-          if (whepIceServers.length > 0) {
-            discoveredIceServers = whepIceServers;
-            if (!hadDiscoveredIceServers) {
-              console.log('[PLAYER] Reiniciando para aplicar ICE servers do WHEP.');
-              cleanup();
-              scheduleReconnect('Ajustando conexão da câmera...', 250);
-              return;
-            }
-          }
-
-          await pc.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp: answerSdp }));
-          firstFrameTimer = setTimeout(() => {
-            if (video.videoWidth === 0 || video.videoHeight === 0) {
-              const iceS = pc ? pc.iceConnectionState : 'sem-pc';
-              const connS = pc ? pc.connectionState : 'sem-pc';
-              cleanup();
-              scheduleReconnect(`Sem frames da câmera.\nICE: ${iceS} | conn: ${connS}\nReconectando...`);
-            }
-          }, FIRST_FRAME_TIMEOUT);
-        } catch (e) {
-          console.error('[PLAYER] Erro WHEP:', e);
-          cleanup();
-          scheduleReconnect(e.message || 'Servidor de vídeo inacessível. Reconectando...');
-        }
-      }
-
-      window.addEventListener('beforeunload', () => { if (reconnectTimer) clearTimeout(reconnectTimer); cleanup(); });
-      window.addEventListener('resize', applyVideoOrientation);
-      applyVideoOrientation();
-      startWhep();
-    </script>
-  <script type="module" src="./Camera ao vivo_files/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;54db3f7bb663429085f2cd209a6fe017&quot;,&quot;r&quot;:1,&quot;spa&quot;:2}" crossorigin="anonymous"></script>
-
-
-<div id="thunderbit-crx-side-bar" style="display:block;opacity:1;top:0;right:0;z-index:9007199254740991;position:fixed;pointer-events:none;user-select:none;" bis_skin_checked="1"><template shadowrootmode="open"><div id="#react-app-root"><div id="#react-app-slot" style="display:flex;direction:ltr;text-align:left;unicode-bidi:isolate;font-family:Helvetica,'Helvetica Neue',Arial,sans-serif,'PingFang SC','Microsoft Yahei','Hiragino Sans GB','-apple-system','Inter';font-size:14px;line-height:normal;"></div></div></template></div><button id="open-side-panel" style="width:0;height:0;opacity:0;user-select:none;pointer-events:all;position:absolute;bottom:0;right:0;padding:0;border:0;outline:none;"></button><div data-v-b007cd="" class="" bis_skin_checked="1"><!----></div><div id="wp-extension" data-id="dpadflhmiohjfhhaehelneimpllfbpcg" bis_skin_checked="1"></div></body><div data-deeptranslate-ui="hover" hidden="" style="position: fixed; z-index: 2147483500; max-width: 360px; max-height: 220px; overflow: auto; padding: 10px 12px; border-radius: 10px; background: rgb(23, 32, 51); color: white; font: 13px / 1.5 system-ui; box-shadow: rgba(19, 41, 77, 0.333) 0px 8px 28px; white-space: pre-wrap;" bis_skin_checked="1"></div><div id="deeptranslate-word-selection" data-deeptranslate-ui="word-selection" bis_skin_checked="1"><template shadowrootmode="open">
-    <style>
-  :host { position: fixed; z-index: 2147483647; font: 14px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  button { font: inherit; }
-  [hidden] { display: none !important; }
-  .retry { border: 0; border-radius: 4px; padding: 6px 12px; background: #00beca; color: #0d0f14; cursor: pointer; font: 12px Arial, sans-serif; text-transform: lowercase; }
-  .retry:hover, .translate-icon:hover { background: #00aab5; }
-  .translate-icon { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 50%; background: #00beca; box-shadow: 0 2px 8px #00000026; cursor: pointer; }
-  .translate-icon svg { width: 18px; height: 18px; fill: white; }
-  .result { position: absolute; left: 0; top: 0; box-sizing: content-box; width: max-content; min-width: min(260px, calc(100vw - 60px)); max-width: min(420px, calc(100vw - 60px)); max-height: calc(100vh - 60px); overflow: auto; overscroll-behavior: contain; border: 0; padding: 14px 18px; border-radius: 12px; background: rgba(17,17,17,.92); color: #f6f7fb; box-shadow: 0 10px 30px #00000059; }
-  .content { white-space: pre-wrap; overflow-wrap: anywhere; }
-  .result:not([data-state="success"]) .content { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-  .error-actions { text-align: center; padding: 20px; }
-  .loading-indicator { display: flex; justify-content: center; padding: 20px 12px 30px; }
-  .loading-indicator span { width: 22px; height: 22px; border: 2px solid #ffffff29; border-top-color: #00beca; border-radius: 50%; animation: spin 1s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .close { display: flex; align-items: center; justify-content: center; position: absolute; right: 4px; top: 4px; width: 20px; height: 20px; padding: 0; border: 0; background: transparent; color: #8b8f9f; cursor: pointer; font-size: 16px; }
-  .close:hover { color: #c5c7d3; }
-</style>
-    <button class="translate-icon" title="Tradução do texto selecionado" hidden=""><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"></path></svg></button>
-    <section class="result" hidden="">
-      <button class="close" aria-label="Fechar">×</button>
-      <div class="content"></div>
-      <div class="error-actions" hidden=""><button class="retry" hidden="">Tentar novamente</button></div>
-      <div class="loading-indicator" hidden=""><span></span></div>
-    </section>
-  </template></div><div data-deeptranslate-ui="floating-button" style="height: 122px; top: 350px;" bis_skin_checked="1"><template shadowrootmode="open">
-    <style>
-  :host { position: fixed; right: 0; width: 60px; height: 122px; z-index: 2147483647; touch-action: none; pointer-events: none; color: #1f2943; font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-  :host([hidden]) { display: none !important; }
-  *, *::before, *::after { box-sizing: border-box; }
-  button, a.action-button { appearance: none; border: 0; margin: 0; padding: 0; font: inherit; text-decoration: none; }
-  .container { position: relative; display: flex; width: 60px; min-height: 122px; flex-direction: column; align-items: flex-end; padding: 0; pointer-events: none; }
-  .container.is-translated { min-height: 158px; }
-  .action-rail { position: relative; display: flex; width: 40px; flex-direction: column; align-items: center; padding: 4px 0; border-radius: 24px; background: #fff; box-shadow: 0 2px 12px rgba(18, 48, 109, 0.20); transform: translate(48px, -12px); transition: transform 300ms ease-in-out, opacity 300ms ease-in-out; pointer-events: auto; }
-  .container.is-hovered .action-rail { transform: translate(-4px, -12px); }
-  .container.is-dragging .action-rail { opacity: 0; pointer-events: none; }
-  .action-button { display: flex; width: 36px; height: 36px; flex: 0 0 36px; align-items: center; justify-content: center; border-radius: 50%; background: #fff; color: #000; cursor: pointer; pointer-events: auto; }
-  .action-button:hover { color: #00939c; }
-  .retry-action { display: none; }
-  .is-translated .retry-action { display: flex; }
-  .action-bridge { position: absolute; top: 68px; right: 0; width: 60px; height: 12px; pointer-events: auto; }
-  .is-translated .action-bridge { top: 104px; }
-  .main { position: relative; display: flex; width: 60px; height: 42px; min-height: 42px; align-items: center; justify-content: center; border-radius: 21px 0 0 21px; background: #fff; color: #00beca; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12); transform: translateX(8px); transition: transform 300ms ease-in-out, background-color 300ms ease-in-out, width 300ms ease-in-out; cursor: pointer; user-select: none; pointer-events: auto; }
-  .main:disabled { cursor: wait; }
-  .is-hovered .main { transform: translateX(0); background: #00beca; color: #fff; }
-  .translate-logo { display: flex; transform: scale(1.1); }
-  .translated-check { position: absolute; left: 33px; top: 24px; display: none; transition: left 300ms ease-in-out, top 300ms ease-in-out; }
-  .is-translated .translated-check { display: flex; }
-  .close-toggle { position: absolute; left: -4px; top: -4px; display: flex; width: 14px; height: 14px; z-index: 1; opacity: 0; cursor: pointer; transition: opacity 200ms ease-in-out; }
-  .is-hovered:not(.is-menu-open):not(.is-dragging) .close-toggle { opacity: 0.4; }
-  .is-hovered:not(.is-menu-open):not(.is-dragging) .close-toggle:hover { opacity: 0.8; }
-  .is-dragging .main { width: 42px; border-radius: 50%; background: #fff; color: #00beca; transform: translateX(0); }
-  .is-dragging .translated-check { left: 22px; top: 22px; }
-  .close-menu { position: absolute; top: 120px; right: 60px; display: flex; width: 200px; max-height: 0; min-height: 0; flex-direction: column; overflow: hidden; border-radius: 12px; background: #fff; box-shadow: 0 4px 12px rgba(18, 48, 109, 0.12); opacity: 0; transition: max-height 500ms ease-out, min-height 500ms ease-out, opacity 500ms ease-out; pointer-events: none; }
-  .is-menu-open .close-menu { min-height: 152px; max-height: 200px; opacity: 1; pointer-events: auto; }
-  .close-menu-items { display: flex; height: 102px; flex-direction: column; align-items: center; margin: 7px 0 8px; border: 1px solid transparent; border-radius: 12px; }
-  .close-menu-items button { width: 184px; min-width: 184px; height: 34px; min-height: 34px; margin: auto; padding-left: 10px; border-radius: 6px; background: #fff; color: #1f2943; font-size: 14px; font-weight: 400; line-height: 34px; text-align: left; white-space: nowrap; cursor: pointer; }
-  .close-menu-items button:hover { background: #f3f5f8; }
-  .divider { width: 100%; height: 1px; background: rgba(31, 41, 67, 0.10); }
-  .close-menu-tip { width: 168px; min-height: 18px; margin: 8px auto; color: #1f2943; font-size: 12px; font-weight: 400; line-height: 18px; text-align: center; }
-  .settings-link { display: inline; background: transparent; color: #00beca; font-size: 12px; font-weight: 600; line-height: 18px; cursor: pointer; }
-  .navigation-error { position: absolute; right: 68px; bottom: 0; display: flex; align-items: flex-start; gap: 8px; width: 280px; max-width: calc(100vw - 80px); padding: 12px; border-radius: 8px; background: #fff; box-shadow: 0 4px 12px rgba(18, 48, 109, 0.20); font-size: 14px; line-height: 20px; pointer-events: auto; }
-  .navigation-error[hidden] { display: none; }
-  .navigation-error button { flex: 0 0 20px; background: transparent; color: inherit; cursor: pointer; }
-  .guide { position: fixed; right: 55px; z-index: 2147483648; pointer-events: auto; }
-  .guide[hidden] { display: none; }
-  .guide-background { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
-  .guide-content { display: flex; flex-direction: column; align-items: center; margin: 16px 32px 60px 21px; }
-  .guide-image { width: 260px; height: 144px; margin-top: 16px; }
-  .guide-message { margin-top: 10px; color: #333; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 16px; font-weight: 700; line-height: 24px; text-align: center; white-space: pre-wrap; }
-  .guide-button { margin-top: 16px; padding: 8px 16px; border-radius: 8px; background: #00beca; color: #fff; font-size: 16px; font-weight: 400; line-height: 24px; cursor: pointer; }
-</style>
-    <div class="container">
-      <div class="close-menu" aria-hidden="true">
-        <div class="close-menu-items">
-          <button data-action="page" title="Ocultar até a próxima visita." aria-label="Ocultar até a próxima visita.">Ocultar até a próxima visita.</button><button data-action="site" title="Este site está desativado." aria-label="Este site está desativado.">Este site está desativado.</button><button data-action="global" title="Global desativado." aria-label="Global desativado.">Global desativado.</button>
+        <div class="actions">
+            <a href="#" class="btn primary">Iniciar Projeto</a>
+            <a href="#" class="btn">Saber Mais</a>
         </div>
-        <div class="divider"></div>
-        <div class="close-menu-tip"><span data-copy="tip-header">Você pode encontrá-lo em</span><button class="settings-link" data-action="settings-link" title="Configurações">configurações</button><span data-copy="tip-last">rea ativar em</span></div>
-      </div>
-      <div class="action-rail">
-        <button class="action-button" data-action="settings" title="Configurações" aria-label="Configurações"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" stroke="#00ADB8" stroke-width="1.5"></circle><path d="M13.5916 3.6294C13.2602 3.5 12.8401 3.5 12 3.5C11.1599 3.5 10.7398 3.5 10.4084 3.6294C9.96662 3.80194 9.61561 4.13289 9.4326 4.54944C9.34906 4.73959 9.31637 4.96073 9.30358 5.28329C9.28478 5.75733 9.02693 6.19611 8.5912 6.43329C8.15548 6.67047 7.62352 6.66161 7.1787 6.43994C6.876 6.28911 6.65653 6.20523 6.4401 6.17836C5.96598 6.11951 5.48648 6.24065 5.10709 6.51512C4.82254 6.72097 4.61251 7.06396 4.19244 7.74994C3.77237 8.43592 3.56234 8.77891 3.51552 9.11417C3.4531 9.56118 3.58158 10.0133 3.8727 10.371C4.00558 10.5342 4.19232 10.6715 4.48216 10.8432C4.90824 11.0956 5.18239 11.5256 5.18237 12C5.18234 12.4744 4.90819 12.9043 4.48215 13.1567C4.19227 13.3284 4.0055 13.4657 3.87261 13.629C3.58149 13.9867 3.45301 14.4388 3.51543 14.8858C3.56225 15.221 3.77228 15.564 4.19235 16.25C4.61242 16.936 4.82246 17.279 5.107 17.4848C5.48639 17.7593 5.96589 17.8804 6.44001 17.8216C6.65643 17.7947 6.87589 17.7108 7.17856 17.56C7.62341 17.3383 8.15541 17.3295 8.59116 17.5667C9.02692 17.8039 9.28477 18.2427 9.30358 18.7168C9.31637 19.0393 9.34907 19.2604 9.4326 19.4506C9.61561 19.8671 9.96662 20.1981 10.4084 20.3706C10.7398 20.5 11.1599 20.5 12 20.5C12.8401 20.5 13.2602 20.5 13.5916 20.3706C14.0334 20.1981 14.3844 19.8671 14.5674 19.4506C14.6509 19.2604 14.6836 19.0393 14.6964 18.7167C14.7152 18.2427 14.973 17.8039 15.4087 17.5667C15.8445 17.3295 16.3765 17.3383 16.8214 17.56C17.124 17.7108 17.3435 17.7947 17.5599 17.8215C18.034 17.8804 18.5135 17.7592 18.8929 17.4848C19.1775 17.2789 19.3875 16.9359 19.8076 16.2499C20.2276 15.564 20.4377 15.221 20.4845 14.8857C20.5469 14.4387 20.4184 13.9866 20.1273 13.6289C19.9944 13.4657 19.8077 13.3284 19.5178 13.1567C19.0917 12.9043 18.8176 12.4743 18.8176 11.9999C18.8177 11.5256 19.0918 11.0957 19.5178 10.8433C19.8077 10.6716 19.9945 10.5343 20.1274 10.371C20.4185 10.0133 20.547 9.56124 20.4846 9.11423C20.4378 8.77897 20.2277 8.43598 19.8076 7.75C19.3876 7.06402 19.1775 6.72103 18.893 6.51518C18.5136 6.24071 18.0341 6.11957 17.56 6.17842C17.3436 6.20529 17.1241 6.28915 16.8214 6.43998C16.3766 6.66165 15.8446 6.67052 15.4088 6.43332C14.9731 6.19612 14.7152 5.75731 14.6964 5.28325C14.6836 4.96071 14.6509 4.73958 14.5674 4.54944C14.3844 4.13289 14.0334 3.80194 13.5916 3.6294Z" stroke="black" stroke-width="1.5"></path></svg></button>
-        <a class="action-button" data-action="pdf" target="_blank" rel="noopener noreferrer" href="https://deeptranslate.ai/pt-BR/translate-pdf" title="Tradução de PDF" aria-label="Tradução de PDF"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5.5 6.7C5.5 5.57989 5.5 5.01984 5.71799 4.59202C5.90973 4.21569 6.21569 3.90973 6.59202 3.71799C7.01984 3.5 7.5799 3.5 8.7 3.5H14.0591C14.3265 3.5 14.4602 3.5 14.5846 3.53253C14.6948 3.56136 14.7993 3.60882 14.8936 3.67286C14.9999 3.74512 15.0879 3.84578 15.2639 4.04711L18.1048 7.29774C18.251 7.4651 18.3241 7.54878 18.3763 7.64355C18.4225 7.7276 18.4564 7.81788 18.4769 7.91159C18.5 8.01724 18.5 8.12837 18.5 8.35063V17.3C18.5 18.4201 18.5 18.9802 18.282 19.408C18.0903 19.7843 17.7843 20.0903 17.408 20.282C16.9802 20.5 16.4201 20.5 15.3 20.5H8.7C7.57989 20.5 7.01984 20.5 6.59202 20.282C6.21569 20.0903 5.90973 19.7843 5.71799 19.408C5.5 18.9802 5.5 18.4201 5.5 17.3V6.7Z" stroke="black" stroke-width="1.5"></path><path d="M13.5 3.5V5.3C13.5 6.4201 13.5 6.98016 13.718 7.40798C13.9097 7.78431 14.2157 8.09027 14.592 8.28201C15.0198 8.5 15.5799 8.5 16.7 8.5H18.5" stroke="black" stroke-width="1.5"></path><rect x="8" y="10.5" width="5" height="1.5" rx="0.75" fill="#00ADB8"></rect><rect x="8" y="14.2002" width="8" height="1.5" rx="0.75" fill="#00ADB8"></rect></svg></a>
-        <button class="action-button retry-action" data-action="retry" title="Tente novamente" aria-label="Tente novamente"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12C4 7.58172 7.58172 4 12 4C14.5006 4 16.7332 5.12779 18.2002 6.88889" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path d="M20 12C20 16.4183 16.4183 20 12 20C9.49936 20 7.26678 18.8722 5.79981 17.1111" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path d="M15 7H19V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M9 17H5V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
-      </div>
-      <div class="action-bridge" aria-hidden="true"></div>
-      <button class="main" data-action="translate" type="button" data-state="original" title="Clique para traduzir a página.">
-        <span class="close-toggle" data-action="close-menu" role="button" tabindex="0" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="7" fill="#000"></circle><path d="M9.29127 3.97591C9.20698 4.0022 9.12844 4.04852 9.06237 4.11458L6.99998 6.17697L4.93758 4.11458C4.70879 3.88578 4.34042 3.88679 4.11263 4.11458C3.97396 4.25325 3.91887 4.44368 3.95039 4.62484C3.97003 4.74055 4.0224 4.84931 4.11263 4.93954L6.17502 7.00193L4.11263 9.06433C3.88484 9.29212 3.88383 9.66049 4.11263 9.88929C4.34142 10.1181 4.70979 10.1171 4.93758 9.88929L6.99998 7.82689L9.06237 9.88929C9.29117 10.1181 9.65954 10.1171 9.88733 9.88929C10.1151 9.6615 10.1161 9.29312 9.88733 9.06433L7.82494 7.00193L9.88733 4.93954C10.1151 4.71175 10.1161 4.34338 9.88733 4.11458C9.72621 3.95346 9.49449 3.90804 9.29127 3.97591Z" fill="#fff"></path></svg></span>
-        <span class="translate-logo"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22" fill="none" aria-hidden="true"><path d="M16.9805 8.39453L11.6078 19.9162" stroke="currentColor" stroke-width="2.73215" stroke-linecap="round"></path><path d="M22.3789 19.9165L17.0062 8.39479" stroke="currentColor" stroke-width="2.73215" stroke-linecap="round"></path><path d="M7.53516 2.10205V4.64461" stroke="currentColor" stroke-width="2.73215" stroke-linecap="round"></path><path d="M20.1875 17.0396H13.8311" stroke="currentColor" stroke-width="2.73215" stroke-linecap="round"></path><path d="M5.06641 8.39453L10.0105 13.3387" stroke="currentColor" stroke-width="2.73215" stroke-linecap="round"></path><path d="M13.5117 4.64453L2.0702 4.64453" stroke="currentColor" stroke-width="2.73215" stroke-linecap="round"></path><path d="M11.8164 4.64453C10.379 9.78533 7.38058 13.4302 2.61328 15.8315" stroke="currentColor" stroke-width="2.73215" stroke-linecap="round"></path></svg></span><span class="translated-check"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect width="16" height="16" rx="8" fill="#50D700"></rect><path d="M13.0548 3.39453C9.81216 5.38386 7.46016 7.89586 6.39882 9.15453L3.80682 7.12253L2.66016 8.0452L7.13482 12.5999C7.90282 10.6265 10.3455 6.77053 13.3268 4.0292L13.0548 3.39453Z" fill="#fff"></path></svg></span>
-      </button>
-    </div>
-    <div class="navigation-error" role="alert" hidden=""><span></span><button data-action="dismiss-error" type="button" aria-label="Fechar">×</button></div>
-    <div class="guide" hidden="" style="top: 300px;">
-      <img class="guide-background" src="chrome-extension://noofnfniimcnghnkonpdlhlaeaocidbi/images/img_guide_bg.webp" alt="">
-      <div class="guide-content"><img class="guide-image" src="chrome-extension://noofnfniimcnghnkonpdlhlaeaocidbi/images/img_guide.webp" alt=""><div class="guide-message">Clique na bola flutuante DeepTranslate para traduzir rapidamente</div><button class="guide-button" type="button">Entendi</button></div>
-    </div></template></div><div hidden="" data-deeptranslate-ui="mobile-popup" bis_skin_checked="1"><template shadowrootmode="open">
-    <style>
-      :host { position: fixed; left: 50%; bottom: 18px; translate: -50% 0; z-index: 2147483550; font: 13px system-ui; }
-      :host([hidden]) { display: none !important; }
-      .bar { display: flex; gap: 5px; padding: 6px; border: 1px solid #dbe3ef; border-radius: 14px; background: #fffffff2; box-shadow: 0 10px 28px #142f5a38; }
-      button { border: 0; border-radius: 9px; min-height: 44px; padding: 8px 11px; background: #edf3ff; color: #1558c8; cursor: pointer; }
-      button.primary { background: #1769ff; color: white; }
-      button.close { min-width: 44px; padding: 0; font-size: 22px; }
-    </style>
-    <div class="bar">
-      <button class="primary translate">Translate</button>
-      <button class="dual">Dual</button>
-      <button class="settings">Settings</button>
-      <button class="close" type="button" title="Fechar a barra móvel. Reative em Configurações → Geral." aria-label="Fechar a barra móvel. Reative em Configurações → Geral.">×</button>
-    </div>
-  </template></div></html>
+    </main>
+
+    <footer>
+        <span>&copy; 2026 STUDIO. Todos os direitos reservados.</span>
+        <span>São Paulo — BR</span>
+    </footer>
+
+</body>
+</html>
